@@ -1,0 +1,43 @@
+.t_dev_test > div{
+    @apply w-1/3 h-full min-h-[70px] flex flex-col justify-between;
+}
+
+.t_dev_test > div p{
+    @apply font-extralight;
+}
+
+.t_dev_test > div p:nth-child(2){
+    @apply font-bold;
+}
+
+.t_d2 > div{
+    @apply w-[31%] mb-2 h-5 rounded-full bg-gray-200;
+}
+
+.t_d22{
+    @apply h-5 rounded-full bg-gray-200;
+}
+
+@media max-1670{
+    
+    .t_dev_test > div{
+        @apply w-1/2;
+    }
+
+}
+
+@screen lg{
+
+    .t_dev_test > div{
+        @apply w-1/3;
+    }
+
+}
+
+@screen extrasm{
+
+    .t_dev_test > div{
+        @apply w-1/2;
+    }
+
+}
