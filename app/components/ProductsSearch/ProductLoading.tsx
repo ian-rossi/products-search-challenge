@@ -5,7 +5,8 @@ export default function ProductLoading() {
     return (
         <div className="
             shadow-[3px_3px_6px_0px_rgba(0,_0,_0,_0.25)] 
-            rounded-3xl 
+            rounded-3xl
+            w-1/2
             px-8 py-3
             flex
         ">
