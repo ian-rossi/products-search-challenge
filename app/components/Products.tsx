@@ -1,7 +1,7 @@
 'use client';
 
 // Setup
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState, useMemo } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
 
 // Types
@@ -16,36 +16,30 @@ export default function Products() {
   const [allProductsData, setAllProductsData] = useState<ProductType[]>([]);
   const [productsData, setProductsData] = useState<ProductType[]>([]);
 
-  const [noResults, setNoResults] = useState(false);
-  
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [noResults, setNoResults] = useState<boolean>(false);
+
   // API Get Data
-  async function fetchAPIData() {
+  // async function fetchAPIData() {
 
-    // fetch('/api/products').then(response => response.json()).then(data => {
-    //   setNoResults(data?.length === 0);
+  //   try {
 
-    //   setAllProductsData(data);
-    //   setProductsData(data);
-    // });
-    
-    try {
+  //     const get_response = await fetch('/api/products');
 
-      const get_response = await fetch('/api/products');
-
-      //if (!get_response.ok)
-        //console.error("Network Response Error"); Disabled for Dev Mode
+  //     //if (!get_response.ok)
+  //       //console.error("Network Response Error"); Disabled for Dev Mode
       
-      const products_data = await get_response.json();
+  //     const products_data = await get_response.json();
 
-      setAllProductsData(products_data);
-      setProductsData(products_data);
+  //     setAllProductsData(products_data);
+  //     setProductsData(products_data);
 
-    } catch (e) {
-      // console.error("API GET Response Error"); Disabled for Dev Mode
+  //   } catch (e) {
+  //     // console.error("API GET Response Error"); Disabled for Dev Mode
 
-    }
+  //   }
 
-  }
+  // }
 
   ////////////
   // Search
@@ -60,34 +54,40 @@ export default function Products() {
       return;
     }
 
+    // Filtered Products
+    const filteredProducts = filter(allProductsData, termToSearch);
+
+    // If No Results
+    setNoResults(filteredProducts.length === 0);
+
+    setProductsData(filteredProducts);
+
+  }
+
+  function filter(dataToFilter: ProductType[], termToSearch: string) {
+
     // Search Terms With Special Characters Filter
     const searchTerms = termToSearch
     .toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     .split(" ")
     .map(t => t.replace(/[^a-zA-Z0-9/]/g, ""))
     .filter(t => t.trim() !== "");
 
-    // Filtered Products
-    const filteredProducts = allProductsData.filter((product: ProductType) => {
-
-      return searchTerms.every(searchTerm => {
+    return dataToFilter.filter((product: ProductType) => {
+      return searchTerms.every(term => {
 
         // Most Used Terms
         if(
-          product.name.toLowerCase().includes(searchTerm)
+          formatStringToSearch(product.name).includes(term)
           ||
-          product.model.toLowerCase().includes(searchTerm)
+          formatStringToSearch(product.model).includes(term)
         )
           return true;
 
-        // Cars Terms
-        if(product.cars && Array.isArray(product.cars)) {
-          const carMatch = product.cars.some((car: string) => {
-            return car.toLowerCase().includes(searchTerm);
-
-          });
-
-          if(carMatch) return true;
+        // Cars Search Terms
+        if(product.cars?.some(car => formatStringToSearch(car).includes(term))) {
+          return true;
 
         }
 
@@ -98,12 +98,12 @@ export default function Products() {
 
           if(Array.isArray(value)) {
             return value.some(item => {
-              item.toString().toLowerCase().includes(searchTerm);
+              formatStringToSearch(item.toString()).includes(term);
               
             });
           }
 
-          return value.toString().toLowerCase().includes(searchTerm);
+          return formatStringToSearch(value.toString()).includes(term);
 
         })
 
@@ -111,10 +111,10 @@ export default function Products() {
 
     })
 
-    // If No Results
-    filteredProducts.length === 0 ? setNoResults(true) : setNoResults(false)
+  }
 
-    setProductsData(filteredProducts);
+  function formatStringToSearch(value: string) {
+    return value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
   }
 
@@ -122,9 +122,44 @@ export default function Products() {
 
   // Use Effect On Init Execution
   useEffect(() => {
+    
+    const fetchAPIData = async () => {
+
+      try{
+
+        const fetch_response = await fetch('/api/products');
+        const products_data = await fetch_response.json();
+
+        //if (!fetch_response.ok)
+          //console.error("Network Response Error"); Disabled for Dev Mode
+
+        setAllProductsData(products_data);
+        setProductsData(products_data);
+
+        setNoResults(products_data?.length === 0);
+
+      } catch (e) {
+        // console.error("API GET Response Error"); Disabled for Dev Mode
+
+      }
+
+      // fetch('/api/products').then(response => response.json()).then(data => {
+      //   setNoResults(data?.length === 0);
+
+      //   setAllProductsData(data);
+      //   setProductsData(data);
+      // });
+
+    }
+
     fetchAPIData();
 
   }, []);
+
+  useMemo(() => {
+    filter(allProductsData, searchQuery);
+
+  }, [searchQuery, allProductsData]);
 
   return (
     // Main Container
@@ -157,7 +192,7 @@ export default function Products() {
             focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 
             sm:pl-9 sm:text-sm/6
             "
-            onChange={e => searchByText(e)}
+            onChange={e => {searchByText(e); setSearchQuery(e.target.value.toString())}}
           />
 
           <MagnifyingGlassIcon
