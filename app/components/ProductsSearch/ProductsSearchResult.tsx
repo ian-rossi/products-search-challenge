@@ -21,7 +21,7 @@ export default function ProductBox({ product }: { product: ProductType }) {
         {/* Product Image Preview */}
         <div className={`
             md:size-48 2xl:size-64
-            w-[20%]
+            w-[20%] max-w-[200px]
             text-center 
             mr-3 xl:mr-0
             sm:mb-0
@@ -32,7 +32,7 @@ export default function ProductBox({ product }: { product: ProductType }) {
             flex flex-col
             ${styles.product_result_image}
         `}>
-            <img src={product.image} alt={product.model} title={product.model} />
+            <img className="w-full h-auto max-w-full max-h-[200px] object-contain" src={product.image} alt={product.model} title={product.model} />
 
             <h3 className="font-bold text-lg">{product.model}</h3>
         </div>

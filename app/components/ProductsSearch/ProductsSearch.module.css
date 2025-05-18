@@ -1,3 +1,4 @@
+/* Product Result */
 .product_result_table > div{
     @apply w-1/3 h-full  flex flex-col justify-between;
 }
@@ -46,6 +47,7 @@
 
 }
 
+/* Media Queries */
 @media screen and (max-width: 550px) {
 
     .product_result_image{
@@ -53,7 +55,7 @@
     }
 
     .product_result_image img{
-        @apply size-28;
+        @apply size-32;
     }
 
 }
@@ -62,6 +64,14 @@
 
     .product_result_table > div{
         @apply w-full mb-2;
+    }
+
+}
+
+@media screen and (max-width: 300px) {
+
+    .product_result_image img{
+        @apply size-24;
     }
 
 }
