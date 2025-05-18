@@ -1,28 +1,31 @@
 'use client';
 
 // Setup
-import { ChangeEvent, useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
 
 // Types
 import { ProductType } from "../api/products/route";
 
 // Children Components
-import ProductsSearchResult from "./ProductsSearch/ProductsSearchResult";
+import ProductsSearchResult from "./ProductsSearch/ProductsSearchContainer";
+import ProductLoading from "./ProductsSearch/ProductsSearchLoading";
 
 export default function Products() {
 
   // Products Data
-  const [allProductsData, setAllProductsData] = useState<ProductType[]>([]);
   const [productsData, setProductsData] = useState<ProductType[]>([]);
 
+  // Search Query Terms
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  const [noResults, setNoResults] = useState<boolean>(false);
+  // Is Loading
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   // API Get Data
   async function fetchAPIData() {
+
+    setIsLoading(true);
 
     try {
 
@@ -32,103 +35,74 @@ export default function Products() {
       //if (!fetch_response.ok)
       //console.error("Network Response Error"); Disabled for Dev Mode
 
-      setAllProductsData(products_data);
       setProductsData(products_data);
-
-      setNoResults(products_data?.length === 0);
+      setIsLoading(false);
 
     } catch (e) {
       // console.error("API GET Response Error"); Disabled for Dev Mode
 
+    } finally {
+      setIsLoading(false);
+
     }
 
   }
 
-  ////////////
-  // Search
-  async function searchByText(e: ChangeEvent<HTMLInputElement>) {
-
-    const termToSearch = e.target.value;
-
-    if (termToSearch === "") {
-      setProductsData(allProductsData);
-      setNoResults(false);
-
-      return;
-    }
-
-    // Filtered Products
-    const filteredProducts = filter(allProductsData, termToSearch);
-
-    // If No Results
-    setNoResults(filteredProducts.length === 0);
-
-    setProductsData(filteredProducts);
-
-  }
-
-  function filter(dataToFilter: ProductType[], termToSearch: string) {
+  // Filtered Products
+  const filteredProducts = useMemo(() => {
 
     // Search Terms With Special Characters Filter
-    const searchTerms = termToSearch
+    const searchTerms = searchQuery
       .toLowerCase()
       .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
       .split(" ")
       .map(t => t.replace(/[^a-zA-Z0-9/]/g, ""))
       .filter(t => t.trim() !== "");
 
-    return dataToFilter.filter((product: ProductType) => {
-      return searchTerms.every(term => {
+    // Return Filtered Products
+    return productsData.filter((product) => {
 
-        // Most Used Terms
-        if (
-          formatStringToSearch(product.name).includes(term)
-          ||
-          formatStringToSearch(product.model).includes(term)
-        )
-          return true;
+      // Prepare For Search
+      const searchableTerms = [
+        product.name,
+        product.model,
+        ...(product.cars || []),
+        ...Object.values(product)
+          .filter(val => val && !['cars', 'name', 'model'].includes(val as string))
+          .map(String)
+      ].map(formatStringToSearch);
+      
+      // Check If Found Some Terms
+      const termsFounded: Boolean = searchTerms.every(term => 
+        searchableTerms.some(text => text.includes(term))
+      );
 
-        // Cars Search Terms
-        if (product.cars?.some(car => formatStringToSearch(car).includes(term))) {
-          return true;
+      // Return If Found
+      if(termsFounded)
+        return product;
 
-        }
+    });
 
-        // Other Product Info Terms
-        return Object.entries(product).some(([key, value]) => {
+  }, [searchQuery, productsData]);
 
-          if (['cars', 'name', 'model'].includes(key) || !value) return false;
-
-          if (Array.isArray(value)) {
-            return value.some(item => {
-              formatStringToSearch(item.toString()).includes(term);
-
-            });
-          }
-
-          return formatStringToSearch(value.toString()).includes(term);
-
-        })
-
-      })
-
-    })
-
-  }
-
+  ////// Search Tools
+  // Format String To Search
   function formatStringToSearch(value: string) {
-    return value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return value
+      .toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9/]/g, "");
 
   }
 
   ////////////
-
   // Use Effect On Init Execution
   useEffect(() => {
     fetchAPIData();
 
   }, []);
 
+  // Render
   return (
     // Main Container
     <div className="w-full flex justify-center flex-col h-full">
@@ -150,17 +124,17 @@ export default function Products() {
             type="search"
             placeholder="Pesquisar produtos"
             className="
-                          col-start-1 row-start-1 
-                          block w-full 
-                          rounded-md bg-white 
-                          py-1.5 pl-10 pr-3 
-                          text-base text-gray-900 
-                          outline outline-1 -outline-offset-1 outline-gray-300 
-                          placeholder:text-gray-400 
-                          focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 
-                          sm:pl-9 sm:text-sm/6
-                      "
-            onChange={e => { searchByText(e); setSearchQuery(e.target.value.toString()) }}
+              col-start-1 row-start-1 
+              block w-full 
+              rounded-md bg-white 
+              py-1.5 pl-10 pr-3 
+              text-base text-gray-900 
+              outline outline-1 -outline-offset-1 outline-gray-300 
+              placeholder:text-gray-400 
+              focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 
+              sm:pl-9 sm:text-sm/6
+          "
+            onChange={e => { setSearchQuery(e.target.value); }}
           />
 
           <MagnifyingGlassIcon
@@ -175,9 +149,11 @@ export default function Products() {
       {/* Divider */}
       <div className="mb-4 border-b border-1"></div>
 
-      {/* Products Search Result */}
-
-      <ProductsSearchResult products={productsData} noResults={noResults}></ProductsSearchResult>
+      {/* Products Search Result */
+        isLoading
+          ? <ProductLoading />
+          : <ProductsSearchResult products={filteredProducts} noResults={filteredProducts.length === 0} />
+      }
 
     </div>
   )
