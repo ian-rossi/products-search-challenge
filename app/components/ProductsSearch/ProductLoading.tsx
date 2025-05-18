@@ -1,5 +1,5 @@
 // Styles
-import styles from './ProductsSearchResult.module.css';
+import styles from './ProductsSearch.module.css';
 
 export default function ProductLoading() {
 

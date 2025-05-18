@@ -1,8 +1,7 @@
 import { ProductType } from "@/app/api/products/route";
 
 // Styles
-import styles from './ProductsSearchResult.module.css';
-import { Key } from "react";
+import styles from './ProductsSearch.module.css';
 
 export default function ProductBox({ product }: { product: ProductType }) {
     

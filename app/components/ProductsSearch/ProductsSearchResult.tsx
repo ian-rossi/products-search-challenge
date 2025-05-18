@@ -7,7 +7,6 @@ import { Key, memo } from 'react';
 import { ProductType } from '@/app/api/products/route';
 
 // Children Components
-import ProductLoading from './ProductLoading';
 import ProductBox from './ProductBox';
 
 type ProductsSearchResultProps = {
@@ -30,12 +29,10 @@ const ProductsSearchResult = memo(({ products, noResults }: ProductsSearchResult
         ">
 
             {/* Products Search Result List */
-
                 products.map((product: ProductType, index: Key) => {
                     return <ProductBox product={product} key={index} />
 
                 })
-
             }
 
             {/* No Results */
@@ -50,5 +47,4 @@ const ProductsSearchResult = memo(({ products, noResults }: ProductsSearchResult
 });
 
 ProductsSearchResult.displayName = 'ProductsSearchResult';
-
 export default ProductsSearchResult;
