@@ -1,7 +1,9 @@
+// Styles
 import styles from './ProductsSearchResult.module.css';
 
 export default function ProductLoading() {
 
+    // Product Loading Component
     return (
         <div className="
             shadow-[3px_3px_6px_0px_rgba(0,_0,_0,_0.25)] 

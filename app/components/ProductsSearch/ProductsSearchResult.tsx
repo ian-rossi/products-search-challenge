@@ -1,8 +1,16 @@
 'use client'
 
-import { Key } from 'react';
-import styles from './ProductsSearchResult.module.css';
+// Setup
+import { Key, Suspense } from 'react';
+
+// Types
 import { ProductType } from '@/app/api/products/route';
+
+// Children Components
+import ProductLoading from './ProductLoading';
+
+// Styles
+import styles from './ProductsSearchResult.module.css';
 
 type ProductsSearchResultProps = {
     products: ProductType[],
@@ -27,6 +35,8 @@ export default function ProductsSearchResult({ products, noResults }: ProductsSe
                 gap-4
             ">
 
+            <Suspense fallback={<ProductLoading />}>
+            
             {
                 products.map((product: ProductType, index: Key) => {
 
@@ -107,6 +117,8 @@ export default function ProductsSearchResult({ products, noResults }: ProductsSe
 
                 })
             }
+
+            </Suspense>
 
         </div>
     );

@@ -1,11 +1,14 @@
 'use client';
 
+// Setup
+import { ChangeEvent, useEffect, useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
 
-import ProductsSearchResult from "./ProductsSearch/ProductsSearchResult";
-import { ChangeEvent, Suspense, useEffect, useState } from "react";
+// Types
 import { ProductType } from "../api/products/route";
-import ProductLoading from "./ProductsSearch/ProductLoading";
+
+// Children Components
+import ProductsSearchResult from "./ProductsSearch/ProductsSearchResult";
 
 export default function Products() {
 
@@ -18,20 +21,19 @@ export default function Products() {
   // API Get Data
   async function fetchAPIData() {
 
-    fetch('/api/products').then(response => response.json()).then(data => {
-      setNoResults(data?.length === 0);
+    // fetch('/api/products').then(response => response.json()).then(data => {
+    //   setNoResults(data?.length === 0);
 
-      setAllProductsData(data);
-      setProductsData(data);
-    });
+    //   setAllProductsData(data);
+    //   setProductsData(data);
+    // });
     
-    /*
     try {
 
       const get_response = await fetch('/api/products');
 
-      if (!get_response.ok)
-        console.error("Network Response Error");
+      //if (!get_response.ok)
+        //console.error("Network Response Error"); Disabled for Dev Mode
       
       const products_data = await get_response.json();
 
@@ -39,10 +41,9 @@ export default function Products() {
       setProductsData(products_data);
 
     } catch (e) {
-      console.error("API GET Response Error");
+      // console.error("API GET Response Error"); Disabled for Dev Mode
 
     }
-      */
 
   }
 
@@ -55,15 +56,18 @@ export default function Products() {
     if(termToSearch === ""){
       setProductsData(allProductsData);
       setNoResults(false);
+      
       return;
     }
 
+    // Search Terms With Special Characters Filter
     const searchTerms = termToSearch
     .toLowerCase()
     .split(" ")
     .map(t => t.replace(/[^a-zA-Z0-9/]/g, ""))
     .filter(t => t.trim() !== "");
 
+    // Filtered Products
     const filteredProducts = allProductsData.filter((product: ProductType) => {
 
       return searchTerms.every(searchTerm => {
@@ -107,13 +111,8 @@ export default function Products() {
 
     })
 
-    if(filteredProducts.length === 0){
-      setNoResults(true);
-
-    }else{
-      setNoResults(false);
-
-    }
+    // If No Results
+    filteredProducts.length === 0 ? setNoResults(true) : setNoResults(false)
 
     setProductsData(filteredProducts);
 
@@ -147,7 +146,17 @@ export default function Products() {
             name="search"
             type="search"
             placeholder="Pesquisar produtos"
-            className="col-start-1 row-start-1 block w-full rounded-md bg-white py-1.5 pl-10 pr-3 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:pl-9 sm:text-sm/6"
+            className="
+            col-start-1 row-start-1 
+            block w-full 
+            rounded-md bg-white 
+            py-1.5 pl-10 pr-3 
+            text-base text-gray-900 
+            outline outline-1 -outline-offset-1 outline-gray-300 
+            placeholder:text-gray-400 
+            focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 
+            sm:pl-9 sm:text-sm/6
+            "
             onChange={e => searchByText(e)}
           />
 
@@ -164,11 +173,7 @@ export default function Products() {
       <div className="mb-4 border-b border-1"></div>
 
       {/* Products Search Result */}
-      <Suspense fallback={<ProductLoading />}>
-
-        <ProductsSearchResult products={productsData} noResults={noResults}></ProductsSearchResult>
-
-      </Suspense>
+      <ProductsSearchResult products={productsData} noResults={noResults}></ProductsSearchResult>
 
     </div>
   )
