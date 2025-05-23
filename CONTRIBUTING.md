@@ -13,4 +13,4 @@ Uma parte puxei do Angular, outras do [Clean Architecture](https://blog.cleancod
 └── [...]
 ```
 
-Como pode ver, as mudanças não foram super drásticas, mais uma mudança estrutural mesmo e algumas dicas técnicas para evoluir ao longo do tempo. 
+Como pode ver, as mudanças não foram super drásticas, mais uma mudança estrutural mesmo e algumas dicas técnicas para evoluir ao longo do tempo. Tem comentários explicando as coisas pra você entender algumas alterações feitas. Além disso, uma dica adicional: siga convenções de código. No seu freela, vc faz do jeito q vc quiser e tá td certo, mas em uma equipe, especialmente em empresas grandes, você será cobrado a escrever um código padronizado e entendível para todo mundo. Foque no simples que é sucesso! Precisando, só me chamar :D

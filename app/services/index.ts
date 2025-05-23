@@ -30,7 +30,9 @@ export const getFilterableProducts = (products: ProductType[]): FilterableProduc
 // Mais detalhes sobre o algoritmo se encontram aqui também: 
 // https://www.geeksforgeeks.org/boyer-moore-algorithm-for-pattern-searching/
 // É mt raro entrarem nesse nível de detalhe profissionalmente falando, 
-// mas vale ter essa consciência para se tornar melhor tecnicamente e conseguir extrair o melhor disso. 
+// mas vale ter essa consciência para se tornar melhor tecnicamente e conseguir extrair o melhor disso.
+// Além disso, como pode ver, simplifiquei drasticamente o filtro em comparação com o que você tinha feito.
+// Foque nisso: simplicidade. 
 export const getProductsIndexesBySearchTokensInLowerCase = (
     filterableProducts: FilterableProducts[],
     searchTokensInLowerCase: string[]
