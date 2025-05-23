@@ -1,7 +1,6 @@
-// Styles
-import styles from './ProductsSearch.module.css';
+import styles from './Products.module.css';
 
-export default function ProductLoading() {
+export default function Loading() {
 
     // Product Loading Component
     return (

@@ -1,22 +1,21 @@
-import { ProductType } from "@/app/api/products/route";
+import styles from './Products.module.css';
+import { ProductItemModel } from "../models";
 
-// Styles
-import styles from './ProductsSearch.module.css';
+export default function ProductItem({ product }: Readonly<ProductItemModel>) {
+    const { image, model, name, treadwear, traction, temperature, speedRating, loadIndex, pattern } = product;
 
-export default function ProductBox({ product }: { product: ProductType }) {
-    
     // Product Result Box
     return <div data-testid="product"
-    className="
-        shadow-[3px_3px_6px_0px_rgba(0,_0,_0,_0.25)] 
-        rounded-3xl 
-        px-8 sm:px-2 py-3
-        flex xl:flex-col
-        xl:items-center
-        xl:text-center
-        h-full
-        bg-white
-    ">
+        className="
+            shadow-[3px_3px_6px_0px_rgba(0,_0,_0,_0.25)] 
+            rounded-3xl 
+            px-8 sm:px-2 py-3
+            flex xl:flex-col
+            xl:items-center
+            xl:text-center
+            h-full
+            bg-white
+        ">
 
         {/* Product Image Preview */}
         <div className={`
@@ -32,47 +31,47 @@ export default function ProductBox({ product }: { product: ProductType }) {
             flex flex-col
             ${styles.product_result_image}
         `}>
-            <img className="w-full h-auto max-w-full max-h-[200px] object-contain" src={product.image} alt={product.model} title={product.model} />
+            <img className="w-full h-auto max-w-full max-h-[200px] object-contain" src={image} alt={model} title={model} />
 
-            <h3 className="font-bold text-lg">{product.model}</h3>
+            <h3 className="font-bold text-lg">{model}</h3>
         </div>
 
         {/* Product Details */}
         <div className="border-l-4 border-black pl-5 my-5 xl:border-none xl:pl-0">
 
-            <h2 className="font-bold text-2xl md:text-xl sm:text-lg mb-4">{product.name}</h2>
+            <h2 className="font-bold text-2xl md:text-xl sm:text-lg mb-4">{name}</h2>
 
             {/* Product Info Table */}
             <div className={`flex flex-wrap items-stretch ${styles.product_result_table}`}>
 
                 <div className="mb-4">
                     <p>Durabilidade</p>
-                    <p className="title">{product.treadwear}</p>
+                    <p className="title">{treadwear}</p>
                 </div>
 
                 <div>
                     <p>Tração</p>
-                    <p className="bold">{product.traction}</p>
+                    <p className="bold">{traction}</p>
                 </div>
 
                 <div className="mb-4">
                     <p>Temperatura</p>
-                    <p className="bold">{product.temperature}</p>
+                    <p className="bold">{temperature}</p>
                 </div>
 
                 <div>
                     <p>Índice de velocidade</p>
-                    <p className="bold">{product.speedRating}</p>
+                    <p className="bold">{speedRating}</p>
                 </div>
 
                 <div>
                     <p>Capacidade de Carga</p>
-                    <p className="bold">{product.loadIndex}</p>
+                    <p className="bold">{loadIndex}</p>
                 </div>
 
                 <div>
                     <p>Desenho</p>
-                    <p className="bold">{product.pattern}</p>
+                    <p className="bold">{pattern}</p>
                 </div>
 
             </div>
@@ -82,5 +81,3 @@ export default function ProductBox({ product }: { product: ProductType }) {
     </div>
 
 }
-
-ProductBox.displayName = 'ProductBox';
