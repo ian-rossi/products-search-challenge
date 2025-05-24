@@ -20,17 +20,17 @@ You must  create a tire filter component. The component has a search field, wher
 
 - Code organization
 - Code quality 
-- responsiveness
+- Responsiveness
 - Component functionality
 - Closest result from upper image
 - Tests
 
-**Obs.**: do **not** modify tests file (app/__tests__/products.test.js) and API file (app/api/products/route.ts)
+**Obs.**: do **not** modify tests file (app/\_\_tests\_\_/products.test.js) and API file (app/api/products/route.ts)
 
 ## General instructions
 
 - The Products.tsx component is where results should be shown.
-- Exchange `<div>Produtos aqui</div>` for a component that shows the results. The following attribute should contain for each product item: `data-testid="product`
+- Exchange `<div>Produtos aqui</div>` for a component that shows the results. The following attribute should contain for each product item: `data-testid="product"`
 - You need to implement the search API that is on `/api/products` route and the tire filter.
 - You can use any desired library, but remember to justify the library choice.
 - Try use tailwindcss to style results component.
