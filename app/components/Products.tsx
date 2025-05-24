@@ -9,18 +9,16 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: Infinity // Pra somente efetuar uma requisição quando carregar ou der refresh na página
+      // Usually not a good practice cache forever until page (re)?load.
+      // I'm doing this bcs data from API is fixed.
+      staleTime: Infinity
     }
   }
 });
 
 export default function Products() {
-  // Toda mudança nesse campo, disparado pelo componente SearchInput, 
-  // vai forçar a re-renderização do componente ProductList, 
-  // renderizando o Loading enquanto não finaliza o mesmo.
   const [searchTokensInLowerCase, setSearchTokensInLowerCase] = useState<string[]>([]);
   return (
-    // Main Container
     <div className="w-full flex justify-center flex-col h-full">
 
       <SearchInput onSearch={setSearchTokensInLowerCase} />

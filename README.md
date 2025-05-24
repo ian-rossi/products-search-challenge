@@ -1,67 +1,59 @@
-Olá, bem vindo ao testes de Frontend da Pneufree, RS Pneus e Pneuzão.
+# The challenge
 
-### O que é este projeto?
+## What is this project?
 
-Este projeto é um teste de frontend para as empresas Pneufree, RS Pneus e Pneuzão. O objetivo é criar um componente de filtro de pneus, que deve ser responsivo e funcionar em dispositivos móveis.
+This project is a frontend test. The objective is to create a tire filter component that must be responsive and work on mobile devices.
 
-## Começando
+## What should be done?
 
-Primeiro, você deve dar um fork neste repositório e clonar o seu fork para a sua máquina.
+You must  create a tire filter component. The component has a search field, where the user can type the tire name and the component should filter the tires that contains the text typed in the name.
 
-Esse projeto usa Next.js, então você deve ter o Node.js instalado na sua máquina.
+- The component should be responsive and work on mobile devices, the image below shows how should be the component appearance (for each result).
+- A route was done mimicking a small API that returns a tire list.
+- There was written 6 tests for the component, you should do the component pass in all tests.
 
-Depois de clonar o repositório, você deve instalar as dependências do projeto. Para isso, você pode usar o npm.
+## Expected result
 
-```bash
-npm install
+![Component example](https://raw.githubusercontent.com/Pneufree/TesteReact/refs/heads/main/image.png)
+
+## What will be evaluated?
+
+- Code organization
+- Code quality 
+- responsiveness
+- Component functionality
+- Closest result from upper image
+- Tests
+
+**Obs.**: do **not** modify tests file (app/__tests__/products.test.js) and API file (app/api/products/route.ts)
+
+## General instructions
+
+- The Products.tsx component is where results should be shown.
+- Exchange `<div>Produtos aqui</div>` for a component that shows the results. The following attribute should contain for each product item: `data-testid="product`
+- You need to implement the search API that is on `/api/products` route and the tire filter.
+- You can use any desired library, but remember to justify the library choice.
+- Try use tailwindcss to style results component.
+- When there's no results, show a 'Nenhum produto encontrado' message.
+
+# The project structure
+
+Mostly [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) with a bit of [Angular project structure](https://angular.dev/reference/configs/file-structure).
+
+```
+├── [...]
+├── environments // Responsible to store environment-relationed configuration (e.g. API URL)
+│   └── index.ts // Used index.ts bcs is a too simple application. Can vary according to domain to simplify identification (url.environment.ts, config.environment.ts etc.)
+├── services 
+│   └── index.ts
+├── models 
+│   └── index.ts
+└── [...]
 ```
 
-Depois de instalar as dependências, você pode rodar o projeto com o comando:
+# Techniques used
 
-```bash
-npm run dev
-```
-
-Abra [http://localhost:3000](http://localhost:3000) no seu navegador para ver o resultado.
-
-## O que deve ser feito?
-
-Você deve criar um componente de filtro de pneus. O componente tem um campo de busca, onde o usuário pode digitar o nome de um pneu e o componente deve filtrar os pneus que contém o texto digitado no nome.
-
-- O componente deve ser responsivo e funcionar em dispositivos móveis, image abaixo de como deve ser a aparência do componente (para cada resultado).
-- Foi feito uma rota imitando uma pequena API que retorna uma lista de pneus.
-- Foram escritos 6 testes para o componente, você deve fazer o componente passar em todos os testes.
-
-### Resultado esperado:
-
-![Exemplo de componente](image.png)
-
-## O que será avaliado?
-
-- Organização do código
-- Qualidade do código
-- Responsividade
-- Funcionamento do componente
-- Resultado mais próximo da imagem acima
-- Testes
-
-## Não modifique o arquivo de testes (products.test.tsx) e o arquivo da api (api/products/route.ts)
-
-### Instruções gerais
-
-- O componente Products.tsx é onde os resultados devem serem mostrados.
-- Substitua `<div>Produtos aqui</div>` por um componente que mostre os resultados. Esse componente deve ter o seguinta atributo: `data-testid="products`
-- Você precisa implementar a busca da api que está em `/api/products` e o filtro dos pneus.
-- Você pode usar qualquer biblioteca que desejar. Mas lembre-se de justificar a escolha da biblioteca.
-- Tente utilizar tailwindcss para estilizar o componente de resultados.
-- Caso não haja resultados, mostre uma mensagem de "Nenhum produto encontrado".
-
-### Instruções para rodar os testes
-
-Para rodar os testes, você pode usar o comando:
-
-```bash
-npm run test
-```
-
-Boa sorte! 🚀
+- [Next.js image optimization](https://nextjs.org/docs/app/getting-started/images)
+- [Debounce](https://medium.com/nerd-for-tech/debounce-your-search-react-input-optimization-fd270a8042b)
+- [N-Grams](https://kavita-ganesan.com/what-are-n-grams/)
+- [React Query caching](https://tanstack.com/query/v4/docs/framework/react/guides/caching)

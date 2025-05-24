@@ -1,7 +1,10 @@
 {
-  "name": "teste-react",
+  "name": "products-search-challenge",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=18.18.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -15,8 +18,7 @@
     "@tanstack/react-query": "^5.76.2",
     "next": "15.0.3",
     "react": "^18",
-    "react-dom": "^18",
-    "use-debounce": "^10.0.4"
+    "react-dom": "^18"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",
